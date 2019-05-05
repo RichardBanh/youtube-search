@@ -6,6 +6,11 @@ import VideoDetail from "./VideoDetail";
 
 class App extends Component {
   state = { response: [], selectedvid: null };
+
+  componentDidMount() {
+    this.onFormSubmit("pokemon");
+  }
+
   onFormSubmit = term => {
     credentials
       .get("/search", {
@@ -14,7 +19,10 @@ class App extends Component {
         }
       })
       .then(response => {
-        this.setState({ response: response.data.items });
+        this.setState({
+          response: response.data.items,
+          selectedvid: response.data.items[0]
+        });
       });
   };
 
