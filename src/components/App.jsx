@@ -2,9 +2,10 @@ import React, { Component } from "react";
 import SearchBar from "./SearchBar";
 import credentials from "./credentials";
 import Videos from "./Videos";
+import VideoDetail from "./VideoDetail";
 
 class App extends Component {
-  state = { response: [] };
+  state = { response: [], selectedvid: null };
   onFormSubmit = term => {
     credentials
       .get("/search", {
@@ -13,14 +14,23 @@ class App extends Component {
         }
       })
       .then(response => {
-        this.setState({ response: response });
+        this.setState({ response: response.data.items });
       });
+  };
+
+  onVideoSelect = video => {
+    this.setState({ selectedvid: video });
+    console.log("from the app", video);
   };
   render() {
     return (
       <>
         <SearchBar onFormSubmit={this.onFormSubmit} />
-        <Videos response={this.state.response} />
+        <VideoDetail video={this.state.selectedvid} />
+        <Videos
+          videos={this.state.response}
+          onVideoSelect={this.onVideoSelect}
+        />
       </>
     );
   }
